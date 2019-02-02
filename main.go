@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	cartservice "github.com/raulgx/go-shopping/services/cart"
+	cartservice "github.com/raulGX/go-shopping/services/cart"
 )
 
 func main() {
