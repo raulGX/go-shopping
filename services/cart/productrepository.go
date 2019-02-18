@@ -15,7 +15,7 @@ const SERVER = "mongodb://localhost:27017"
 // DBNAME the name of the DB instance
 const DBNAME = "store"
 
-// COLLECTION is the name of the collection in DB
+// PRODUCTCOLLECTION is the name of the collection in DB
 const PRODUCTCOLLECTION = "products"
 
 type Product struct {
