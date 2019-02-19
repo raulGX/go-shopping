@@ -8,7 +8,7 @@ import (
 	"github.com/unrolled/render"
 )
 
-func createProductHandler(formatter *render.Render) http.HandlerFunc {
+func createProductHandler(formatter *render.Render, r ProductRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		payload, _ := ioutil.ReadAll(req.Body)
 
@@ -26,7 +26,7 @@ func createProductHandler(formatter *render.Render) http.HandlerFunc {
 		}
 
 		newProduct := Product{Name: addProductReq.Name}
-		err = ProductRepository{}.AddProduct(newProduct) // TODO INJECT
+		err = r.AddProduct(newProduct) // TODO INJECT
 		if err != nil {
 			formatter.Text(w, http.StatusBadRequest, "Failed to save to db")
 		}
@@ -35,9 +35,9 @@ func createProductHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
-func listProductsHandler(formatter *render.Render) http.HandlerFunc {
+func listProductsHandler(formatter *render.Render, r ProductRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		products, err := ProductRepository{}.GetProducts()
+		products, err := r.GetProducts()
 		if err != nil {
 			formatter.Text(w, http.StatusInternalServerError, "Failed to fetch products")
 			return

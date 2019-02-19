@@ -11,3 +11,13 @@ func (a AddProductRequest) IsValid() bool {
 	}
 	return valid
 }
+
+type DBConfig struct {
+	IP     string
+	DBName string
+}
+
+type ProductRepository interface {
+	AddProduct(Product) error
+	GetProducts() (Products, error)
+}

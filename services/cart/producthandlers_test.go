@@ -2,6 +2,7 @@ package cart
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -17,10 +18,12 @@ var (
 	})
 )
 
+var productRepo = NewInMemoryProductRepository()
+
 func TestCreateProduct(t *testing.T) {
 	client := &http.Client{}
 	server := httptest.NewServer(
-		http.HandlerFunc(createProductHandler(formatter)))
+		http.HandlerFunc(createProductHandler(formatter, productRepo)))
 	defer server.Close()
 
 	body := []byte("{\"name\": \"avocado\"}")
@@ -66,10 +69,13 @@ func TestCreateProduct(t *testing.T) {
 	fmt.Printf("Payload: %s", string(payload))
 }
 
+// TestListProducts will only work if ran with the other tests
+// It expects insertions to be made
+// TODO clear the list and then make this into an integration test
 func TestListProducts(t *testing.T) {
 	client := &http.Client{}
 	server := httptest.NewServer(
-		http.HandlerFunc(listProductsHandler(formatter)))
+		http.HandlerFunc(listProductsHandler(formatter, productRepo)))
 	defer server.Close()
 
 	req, err := http.NewRequest("GET", server.URL, bytes.NewBuffer([]byte{}))
@@ -92,5 +98,16 @@ func TestListProducts(t *testing.T) {
 		t.Errorf("Expected response status 200, received %s", res.Status)
 	}
 
+	results := &Products{}
+	err = json.Unmarshal(payload, &results)
+	if err != nil {
+		t.Error("Payload is not valid json")
+	}
+
+	if len(*results) != 1 {
+		// not sure about this
+		// results from the test above (addproduct)
+		t.Error("Number of results doesn't match the required value")
+	}
 	fmt.Printf("Payload: %s", string(payload))
 }
