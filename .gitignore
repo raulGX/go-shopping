@@ -22,4 +22,4 @@ _testmain.go
 *.test
 *.prof
 /coverage.out
-/go-shopping
+go-shopping

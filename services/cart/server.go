@@ -1,8 +1,6 @@
 package cart
 
 import (
-	"net/http"
-
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/render"
@@ -24,11 +22,6 @@ func NewServer() *negroni.Negroni {
 }
 
 func initRoutes(mx *mux.Router, formatter *render.Render) {
-	mx.HandleFunc("/test", testHandler(formatter)).Methods("GET")
-}
-
-func testHandler(formatter *render.Render) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		formatter.JSON(w, http.StatusOK, struct{ Test string }{"This is a test"})
-	}
+	mx.HandleFunc("/products", listProductsHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/products", createProductHandler(formatter)).Methods("POST")
 }

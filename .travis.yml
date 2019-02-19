@@ -5,4 +5,4 @@ go:
 
 script: 
   - go get ./...
-  - go test -v ./services/cart
+  # - go test -v ./services/cart
