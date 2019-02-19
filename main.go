@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 	cartservice "github.com/raulGX/go-shopping/services/cart"
 )
 
@@ -13,7 +15,11 @@ func main() {
 		port = "3000"
 	}
 
-	server := cartservice.NewServer()
+	n := negroni.Classic()
+	mx := mux.NewRouter()
 
-	server.Run(":" + port)
+	cartservice.AddRoutes(mx)
+	n.UseHandler(mx)
+
+	n.Run(":" + port)
 }
