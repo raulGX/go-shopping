@@ -9,6 +9,7 @@ func AddRoutes(mx *mux.Router) {
 	formatter := render.New(render.Options{
 		IndentJSON: true,
 	})
+	NewPostgresConnection()
 
 	initRoutes(mx, formatter)
 }

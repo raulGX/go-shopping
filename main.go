@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	cartservice "github.com/raulGX/go-shopping/services/cart"
+	usermgmtservice "github.com/raulGX/go-shopping/services/usermgmt"
 )
 
 func main() {
@@ -19,6 +20,8 @@ func main() {
 	mx := mux.NewRouter()
 
 	cartservice.AddRoutes(mx)
+	usermgmtservice.AddRoutes(mx)
+
 	n.UseHandler(mx)
 
 	n.Run(":" + port)

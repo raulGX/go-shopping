@@ -16,3 +16,20 @@ func (u *UserCreateRequest) IsValid() bool {
 	}
 	return isValid
 }
+
+type UserRepository interface {
+	AddUser(UserCreateRequest) error
+	GetUserByUsername(string) (UserModel, error)
+}
+
+type UserNotFoundError struct{}
+
+func (e *UserNotFoundError) Error() string {
+	return "User not found"
+}
+
+type UserAlreadyExistsError struct{}
+
+func (e *UserAlreadyExistsError) Error() string {
+	return "User already exists"
+}
