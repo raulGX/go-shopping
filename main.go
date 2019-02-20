@@ -3,7 +3,10 @@ package main
 import (
 	"os"
 
+	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 	cartservice "github.com/raulGX/go-shopping/services/cart"
+	usermgmtservice "github.com/raulGX/go-shopping/services/usermgmt"
 )
 
 func main() {
@@ -13,7 +16,14 @@ func main() {
 		port = "3000"
 	}
 
-	server := cartservice.NewServer()
+	n := negroni.Classic()
+	mx := mux.NewRouter()
+	db := usermgmtservice.NewPostgresConnection()
+	defer db.Close()
+	cartservice.AddRoutes(mx)
+	usermgmtservice.AddRoutes(mx, db)
 
-	server.Run(":" + port)
+	n.UseHandler(mx)
+
+	n.Run(":" + port)
 }
