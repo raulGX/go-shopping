@@ -6,7 +6,6 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
-// Maybe mock for in memory
 const SERVER = "mongodb://localhost:27017"
 
 // DBNAME the name of the DB instance
@@ -21,6 +20,7 @@ func AddRoutes(mx *mux.Router) {
 	})
 	//create session here
 	session, err := mgo.Dial(dbcfg.IP)
+	// should close the session on exit?
 	if err != nil {
 		panic("Could not connect to db")
 	}

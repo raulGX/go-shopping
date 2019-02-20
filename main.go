@@ -18,9 +18,10 @@ func main() {
 
 	n := negroni.Classic()
 	mx := mux.NewRouter()
-
+	db := usermgmtservice.NewPostgresConnection()
+	defer db.Close()
 	cartservice.AddRoutes(mx)
-	usermgmtservice.AddRoutes(mx)
+	usermgmtservice.AddRoutes(mx, db)
 
 	n.UseHandler(mx)
 

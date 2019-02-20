@@ -4,6 +4,8 @@ import (
 	sql "database/sql"
 	"fmt"
 
+	table "github.com/raulGX/go-shopping/services/usermgmt/table"
+
 	_ "github.com/lib/pq"
 )
 
@@ -20,12 +22,17 @@ func NewPostgresConnection() *sql.DB {
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
+
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
 
 	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	err = table.EnsureUsersTableExists(db)
 	if err != nil {
 		panic(err)
 	}
