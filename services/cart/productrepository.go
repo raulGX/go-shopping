@@ -21,13 +21,14 @@ type MongoProductRepository struct {
 }
 
 func NewMongoProductRepository(session *mgo.Session, c *DBConfig) *MongoProductRepository {
-	collection := session.DB(c.DBName).C(PRODUCTCOLLECTION)
+	collection := session.DB(c.DBName).C(PRODUCTCOLLECTION) // move collection inside methods
 	// add indexes here
 	return &MongoProductRepository{collection}
 }
 
 func (r *MongoProductRepository) GetProducts() (Products, error) {
 	results := Products{}
+	// get collection & close afterwards
 	if err := r.Collection.Find(nil).All(&results); err != nil {
 		return nil, errors.New("Couldn't connect to the database")
 	}
